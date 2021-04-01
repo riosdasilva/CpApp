@@ -16,6 +16,7 @@ public class ClientService {
 
 	// servico que cria um cliente e retorna
 	public Client save(Client cli) {
+        emailExist(cli);
 		return repository.save(cli);
 	}
 
@@ -39,9 +40,20 @@ public class ClientService {
 	public Client deleteById(Long id) {
 		return repository.deleteById(id);
 	}
-	
-	//servico que faz listagem de todos os clientes existentes no momento
-	public List<Client> listAll(){
+
+	// servico que faz listagem de todos os clientes existentes no momento
+	public List<Client> listAll() {
 		return repository.findAll();
+	}
+
+	//metodo que valida se o email inserido já existe ou não
+	public void emailExist(Client cli) {
+		String email = cli.getEmail();
+		List<String> emails = repository.findAllEmail();
+		for (int i = 0; i <= emails.size() -1; i++) {
+			if (email.equals(emails.get(i)) == true) {
+				throw new RuntimeException("The email already exists! Please change to a new");
+			}
+		}
 	}
 }

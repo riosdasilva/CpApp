@@ -11,6 +11,9 @@ public class Inspector extends User {
 	public Inspector(String birthday, String email, String name, String nationaly, String password) {
 		super(birthday, email, name, nationaly, password);
 	}
+	public Inspector() {
+		super(null, null, null, null, null);
+	}
 	
 	
 }
