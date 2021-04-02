@@ -1,6 +1,7 @@
 package com.jp.cpProject.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,36 +21,40 @@ import com.jp.cpProject.service.ClientService;
 @RestController
 @RequestMapping(value = "/client")
 public class ClientController {
-    
+
 	@Autowired
 	private ClientService service;
-	
+
 	@GetMapping(value = "/{id}")
 	public Client getClientById(@PathVariable("id") Long id) {
-	    return this.service.getClientById(id);
+		return this.service.getClientById(id);
 	}
-	
+
 	@PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> create(@RequestBody Client Cli) {
-        Client client = this.service.save(Cli);
-        return ResponseEntity.ok(client);
-    }
-	
-	@PutMapping(value = "/edit/{id}", 
-			consumes = MediaType.APPLICATION_JSON_VALUE, 
-			produces = MediaType.APPLICATION_JSON_VALUE)
+		Client client = this.service.save(Cli);
+		return ResponseEntity.ok(client);
+	}
+
+	@PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateCli(@PathVariable("id") Long id, @RequestBody Client CliInput) {
-        Client client = this.service.updateCli(id, CliInput);
-        return ResponseEntity.ok(client);
-    }
-	
+		Client client = this.service.updateCli(id, CliInput);
+		return ResponseEntity.ok(client);
+	}
+
 	@DeleteMapping(value = "/del/{id}")
 	public Client deleteById(@PathVariable("id") Long id) {
-	    return this.service.deleteById(id);
+		return this.service.deleteById(id);
 	}
-	
+
 	@GetMapping(value = "/list")
 	public List<Client> listAll() {
-	    return this.service.listAll();
+		return this.service.listAll();
+	}
+
+	@PostMapping(value = "/logIn", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loginCli(@RequestBody String email, String password) {
+		Map<Object, Object> model = this.service.loginCli(email, password);
+		return ResponseEntity.ok(model);
 	}
 }
