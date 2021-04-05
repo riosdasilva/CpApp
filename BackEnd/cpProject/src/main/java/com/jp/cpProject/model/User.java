@@ -1,5 +1,6 @@
 package com.jp.cpProject.model;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -11,9 +12,16 @@ import javax.persistence.InheritanceType;
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User extends AbstractEntity {
 	private String birthday;
+
+	@Column(nullable = false, unique = true)
 	private String email;
+	
+	@Column(nullable = false, unique = true)
+	private String username;
+	
 	private String name;
 	private String nationaly;
+
 	private String password;
 
 	public User(String birthday, String email, String name, String nationaly, String password) {
@@ -38,6 +46,18 @@ public class User extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 
 	public String getNationaly() {

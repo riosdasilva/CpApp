@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jp.cpProject.model.Client;
 import com.jp.cpProject.model.Inspector;
 import com.jp.cpProject.repository.InspectorRepository;
 
@@ -20,14 +21,18 @@ public class InspectorService {
 	}
 
 	// servico que obtem um inspetor e retorna
-	public Inspector getInspectorById(Long id) {
-		return repository.getInspectorById(id);
+	public Inspector getInspectorByEmail(String email) {
+		return repository.getInspectorByEmail(email);
+	}
+
+	public Client getInspectorById(Long id) {
+		return repository.findInspectorById(id);
 	}
 
 	// servico que faz update a um inspetor para ja numa primeira versao faz a todos
 	// os campos de negocio)
-	public Inspector updateImp(Long id, Inspector i) {
-		Inspector imp = getInspectorById(id);
+	public Inspector updateImp(String email, Inspector i) {
+		Inspector imp = getInspectorByEmail(email);
 		imp.setName(i.getName());
 		imp.setEmail(i.getEmail());
 		imp.setNationaly(i.getNationaly());
@@ -39,9 +44,9 @@ public class InspectorService {
 	public Inspector deleteById(Long id) {
 		return repository.deleteById(id);
 	}
-	
-	//servico que faz listagem de todos os inspetores existentes no momento
-	public List<Inspector> listAll(){
+
+	// servico que faz listagem de todos os inspetores existentes no momento
+	public List<Inspector> listAll() {
 		return repository.findAll();
 	}
 }

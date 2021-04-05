@@ -1,7 +1,6 @@
 package com.jp.cpProject.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jp.cpProject.jwt.Database.AuthenticationHelper;
 import com.jp.cpProject.model.Client;
 import com.jp.cpProject.service.ClientService;
 
@@ -25,9 +26,13 @@ public class ClientController {
 	@Autowired
 	private ClientService service;
 
-	@GetMapping(value = "/{id}")
-	public Client getClientById(@PathVariable("id") Long id) {
-		return this.service.getClientById(id);
+	@Autowired
+	private AuthenticationHelper authenticationHelper;
+
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Client getClientById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token) {
+		Client c = this.service.getClientById(id);
+		return this.service.getClientByEmail(c.getEmail());
 	}
 
 	@PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,9 +41,9 @@ public class ClientController {
 		return ResponseEntity.ok(client);
 	}
 
-	@PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateCli(@PathVariable("id") Long id, @RequestBody Client CliInput) {
-		Client client = this.service.updateCli(id, CliInput);
+	@PutMapping(value = "/edit/{email}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateCli(@PathVariable("email") String email, @RequestBody Client CliInput) {
+		Client client = this.service.updateCli(email, CliInput);
 		return ResponseEntity.ok(client);
 	}
 
@@ -50,11 +55,5 @@ public class ClientController {
 	@GetMapping(value = "/list")
 	public List<Client> listAll() {
 		return this.service.listAll();
-	}
-
-	@PostMapping(value = "/logIn", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> loginCli(@RequestBody String email, String password) {
-		Map<Object, Object> model = this.service.loginCli(email, password);
-		return ResponseEntity.ok(model);
 	}
 }

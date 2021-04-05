@@ -24,9 +24,9 @@ public class InspectorController {
 	@Autowired
 	private InspectorService service;
 
-	@GetMapping(value = "/{id}")
-	public Inspector getInspectorById(@PathVariable("id") Long id) {
-		return this.service.getInspectorById(id);
+	@GetMapping(value = "/{email}")
+	public Inspector getInspectorById(@PathVariable("email") String email) {
+		return this.service.getInspectorByEmail(email);
 	}
 
 	@PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -35,9 +35,9 @@ public class InspectorController {
 		return ResponseEntity.ok(inspector);
 	}
 
-	@PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateImp(@PathVariable("id") Long id, @RequestBody Inspector ImpInput) {
-		Inspector inspector = this.service.updateImp(id, ImpInput);
+	@PutMapping(value = "/edit/{email}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateImp(@PathVariable("id") String email, @RequestBody Inspector ImpInput) {
+		Inspector inspector = this.service.updateImp(email, ImpInput);
 		return ResponseEntity.ok(inspector);
 	}
 

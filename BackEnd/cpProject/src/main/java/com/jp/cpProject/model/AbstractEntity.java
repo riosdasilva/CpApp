@@ -2,10 +2,14 @@ package com.jp.cpProject.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Objects;
 
 // Class que permite registar a auditoria dos dados registados na base de dados
@@ -65,5 +69,30 @@ public class AbstractEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "id=" + id + ", createDateTime=" + createDateTime + ", updateDateTime=" + updateDateTime;
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

@@ -13,8 +13,8 @@ public interface ClientRepository extends Repository<Client, Long> {
 	// metodo que guarda o client apos o service de criaçao
 	Client save(Client c);
 
-	// metodo que obtem um client atraves do id
-	Client getClientById(Long id);
+	// metodo que obtem o cliente atraves do id)
+	Client findClientById(Long id);
 
 	// metodo que apaga um cliente
 	Client deleteById(Long id);

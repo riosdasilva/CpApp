@@ -1,19 +1,13 @@
 package com.jp.cpProject.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jp.cpProject.model.Client;
-import com.jp.cpProject.model.ExceptionRuntime;
 import com.jp.cpProject.repository.ClientRepository;
-
-import jwt.JwtTokenProvider;
 
 @Service
 public class ClientService {
@@ -21,25 +15,30 @@ public class ClientService {
 	@Autowired
 	private ClientRepository repository;
 
-	JwtTokenProvider tokenProvider;
-
-	AuthenticationManager authenticationManager;
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 
 	// servico que cria um cliente e retorna
 	public Client save(Client cli) {
 		emailExist(cli);
+		cli.setPassword(bcryptEncoder.encode(cli.getPassword()));
 		return repository.save(cli);
 	}
 
 	// servico que obtem um client e retorna
-	public Client getClientById(Long id) {
-		return repository.getClientById(id);
+	public Client getClientByEmail(String email) {
+		return repository.findClientByEmail(email);
 	}
+	
+	// servico que obtem um client e retorna
+    public Client getClientById(Long id) {
+	   return repository.findClientById(id);
+    }
 
 	// servico que faz update a um client (para ja numa primeira versao faz a todos
 	// os campos de negocio)
-	public Client updateCli(Long id, Client c) {
-		Client cli = getClientById(id);
+	public Client updateCli(String email, Client c) {
+		Client cli = getClientByEmail(email);
 		cli.setName(c.getName());
 		cli.setEmail(c.getEmail());
 		cli.setNationaly(c.getNationaly());
@@ -66,26 +65,5 @@ public class ClientService {
 				throw new RuntimeException("The email already exists! Please change to a new");
 			}
 		}
-	}
-
-	// metodo que executa o login do cliente
-	public Map<Object, Object> loginCli(String email, String password) {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-
-		Client cli = repository.findClientByEmail(email);
-
-		String token = "";
-
-		if (cli != null) {
-			token = tokenProvider.createToken(email);
-		} else {
-			throw new ExceptionRuntime("Email " + email + "and password " + password + "not found");
-		}
-
-		Map<Object, Object> model = new HashMap<>();
-		model.put("email", email);
-		model.put("password", password);
-		return model;
-
 	}
 }
